@@ -1,0 +1,165 @@
+# Marketing A/B Testing: Ads vs PSA
+
+## Overview
+
+How much better does an advertisement perform compared with a public service announcement (PSA)?
+
+This project uses an A/B testing dataset to evaluate whether users exposed to advertisements were more likely to convert than users exposed to PSAs.
+
+I approached the dataset from a **marketing and business perspective**, using statistical testing to determine whether the difference in conversion was meaningful, then looking at ad exposure and timing to identify patterns that could inform future campaign decisions.
+
+## Business Questions
+
+The analysis was built around five main questions:
+
+1. Do advertisements generate a higher conversion rate than PSAs?
+2. How large is the difference between the two groups?
+3. Is the difference statistically significant?
+4. Does greater ad exposure appear to be associated with conversion?
+5. Does conversion vary depending on the day or hour users saw the most ads?
+
+## Dataset
+
+The dataset contains user-level information from an advertising experiment, including:
+
+* Test group (`ad` or `psa`)
+* Conversion status
+* Total number of ads seen
+* Day users saw the most ads
+* Hour users saw the most ads
+
+Before analysis, I inspected the dataset for missing values, duplicates and general structure, and removed an unnecessary index column.
+
+## Analysis
+
+### 1. Conversion Rate: Ad vs PSA
+
+I calculated the conversion rate for each test group and compared the difference between them.
+
+The ad group converted at approximately **2.55%**, compared with **1.79%** for the PSA group.
+
+This represents:
+
+* **Absolute difference:** ~0.77 percentage points
+* **Relative lift:** ~43.1%
+
+The relative lift provides useful business context: conversion in the ad group was approximately 43% higher relative to the PSA baseline.
+
+### 2. Statistical Significance
+
+To determine whether the observed difference could reasonably be attributed to random variation, I conducted a **two-proportion z-test**.
+
+**Null hypothesis (H₀):** There is no difference in conversion rates between the ad and PSA groups.
+
+**Alternative hypothesis (H₁):** There is a difference in conversion rates between the ad and PSA groups.
+
+Using a **5% significance level**, the test produced a p-value substantially below 0.05.
+
+Therefore, I rejected the null hypothesis and concluded that there is statistically significant evidence of a difference in conversion between the two treatments.
+
+I also calculated a 95% confidence interval for the difference in conversion rates. The interval was approximately **0.60 to 0.94 percentage points**, providing further evidence that the ad treatment performed better in this experiment.
+
+### 3. Ad Exposure and Conversion
+
+I compared the number of ads seen by users who converted with those who did not.
+
+Converters saw substantially more ads on average than non-converters. I also grouped users according to their total ad exposure and calculated conversion rates across the exposure groups.
+
+The results suggest an **association between ad exposure and conversion**.
+
+However, this should not be interpreted as proof that increasing ad exposure causes conversion. Users who are already more engaged or more likely to convert may also be exposed to more ads.
+
+A controlled experiment testing different exposure levels would be needed to establish causality.
+
+### 4. Conversion by Day
+
+I compared conversion rates across the days on which users saw the most ads.
+
+Conversion varied across the days, with **Monday showing the highest observed conversion rate** in this dataset.
+
+This is useful as a potential campaign hypothesis, but it should not be treated as definitive evidence that Monday is inherently the best day to advertise.
+
+### 5. Conversion by Hour
+
+I also examined conversion rates across advertising hours.
+
+Conversion varied throughout the day, suggesting that the timing of ad exposure may be worth investigating further.
+
+Rather than immediately reallocating the entire advertising budget based on these observations, a follow-up experiment would help determine whether the differences persist and are large enough to justify a change in campaign scheduling.
+
+## Key Findings
+
+| Finding                         | Result                       |
+| ------------------------------- | ---------------------------- |
+| Ad conversion rate              | ~2.55%                       |
+| PSA conversion rate             | ~1.79%                       |
+| Absolute difference             | ~0.77 percentage points      |
+| Relative lift                   | ~43.1%                       |
+| Statistical significance        | Significant at α = 0.05      |
+| 95% CI for difference           | ~0.60–0.94 percentage points |
+| Highest observed conversion day | Monday                       |
+
+## Business Recommendations
+
+### 1. Prioritise the ad treatment
+
+The ad treatment generated a higher conversion rate than the PSA and the difference was statistically significant. If conversion is the primary objective, the business has evidence to favour the ad treatment.
+
+However, the next question should be whether the additional conversions justify the cost of running the ads.
+
+### 2. Test ad frequency rather than simply increasing exposure
+
+Higher exposure was associated with higher conversion, but more impressions do not necessarily mean more profit.
+
+The business should test different frequency levels to identify the point at which additional exposure stops generating meaningful incremental conversions.
+
+### 3. Investigate campaign timing
+
+The differences observed across days and hours provide useful hypotheses for future campaign scheduling.
+
+Monday and higher-performing hours could be tested against other periods using controlled experiments before making significant budget changes.
+
+### 4. Measure business impact beyond conversion rate
+
+Conversion rate alone does not tell us whether a campaign is profitable.
+
+Future campaign analysis should also track:
+
+* Cost per acquisition (CPA)
+* Cost per conversion
+* Revenue per converted customer
+* Return on ad spend (ROAS)
+* Customer lifetime value, where available
+
+### 5. Run follow-up experiments
+
+The current analysis identifies relationships worth investigating, but further A/B tests could determine whether changes in ad frequency and timing actually cause improvements in conversion.
+
+## Next Steps
+
+The next step for a marketing team would be to use these findings to guide decisions around:
+
+* Which treatment should receive more budget
+* How much ad exposure is appropriate
+* Which days and hours deserve greater attention
+* Whether additional exposure generates enough incremental conversions to justify its cost
+* Which campaign metrics should be monitored to measure profitability
+
+
+## Tools Used
+
+* **Python**
+* **Pandas** — data manipulation and analysis
+* **NumPy** — numerical operations
+* **Matplotlib** — visualisation
+* **Statsmodels** — statistical hypothesis testing and confidence intervals
+* **Jupyter Notebook**
+
+
+## Takeaway
+
+The experiment provides evidence that the ad treatment outperformed the PSA treatment, producing a higher conversion rate and a statistically significant difference.
+
+The more interesting business question, however, is what happens next: how much should the business spend, how frequently should users see the ads, and when should those ads run?
+
+Those questions require moving beyond conversion rate into experimentation, campaign economics and incremental business impact.
