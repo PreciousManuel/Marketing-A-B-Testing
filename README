@@ -1,24 +1,36 @@
 # Marketing A/B Testing: Ads vs PSA
 
-## Overview
+## Why I built this
 
-How much better does an advertisement perform compared with a public service announcement (PSA)?
+A/B testing has quickly become one of my favourite parts of marketing analytics.
 
-This project uses an A/B testing dataset to evaluate whether users exposed to advertisements were more likely to convert than users exposed to PSAs.
+I've always been interested in what happens **behind the campaign numbers**. A campaign can have clicks, impressions and conversions, but those numbers become much more useful when you start asking better questions:
 
-I approached the dataset from a **marketing and business perspective**, using statistical testing to determine whether the difference in conversion was meaningful, then looking at ad exposure and timing to identify patterns that could inform future campaign decisions.
+**What actually changed? Was it meaningful? And what should the business do with that information?**
 
-## Business Questions
+That was what I wanted to explore with this project.
 
-The analysis was built around five main questions:
+Instead of simply comparing which group had more conversions, I wanted to use statistical testing to determine whether the difference was meaningful, then dig a little deeper into **ad exposure and timing** to see what other patterns could inform marketing decisions.
+
+For this project, I used an A/B testing dataset to investigate a simple business problem:
+
+> **If a business can choose between showing customers an advertisement or a public service announcement, which performs better—and what else can we learn from the campaign data?**
+
+---
+
+## The Questions I Wanted to Answer
+
+I structured the analysis around five questions:
 
 1. Do advertisements generate a higher conversion rate than PSAs?
-2. How large is the difference between the two groups?
-3. Is the difference statistically significant?
+2. How large is the difference?
+3. Is the difference statistically significant, or could it simply be random variation?
 4. Does greater ad exposure appear to be associated with conversion?
 5. Does conversion vary depending on the day or hour users saw the most ads?
 
-## Dataset
+---
+
+## The Dataset
 
 The dataset contains user-level information from an advertising experiment, including:
 
@@ -28,102 +40,162 @@ The dataset contains user-level information from an advertising experiment, incl
 * Day users saw the most ads
 * Hour users saw the most ads
 
-Before analysis, I inspected the dataset for missing values, duplicates and general structure, and removed an unnecessary index column.
+I started with some basic data quality checks: understanding the structure of the dataset, checking for missing values and examining the distribution of the test groups and conversion outcomes.
 
-## Analysis
+I also removed an unnecessary index column before beginning the analysis.
 
-### 1. Conversion Rate: Ad vs PSA
+---
 
-I calculated the conversion rate for each test group and compared the difference between them.
+# What I Found
 
-The ad group converted at approximately **2.55%**, compared with **1.79%** for the PSA group.
+## 1. The Ad Performed Better Than the PSA
 
-This represents:
+The first question was the simplest:
+
+**Did the advertisement actually convert more people?**
+
+The answer was yes.
+
+The ad group had a conversion rate of approximately **2.55%**, compared with **1.79%** for the PSA group.
+
+That gives us:
 
 * **Absolute difference:** ~0.77 percentage points
 * **Relative lift:** ~43.1%
 
-The relative lift provides useful business context: conversion in the ad group was approximately 43% higher relative to the PSA baseline.
+The relative lift was particularly interesting from a marketing perspective. The ad group converted at a rate approximately **43% higher than the PSA group**, relative to the PSA baseline.
 
-### 2. Statistical Significance
+But I didn't want to stop at "the ad converted better."
 
-To determine whether the observed difference could reasonably be attributed to random variation, I conducted a **two-proportion z-test**.
+A difference in two numbers doesn't automatically mean the difference is meaningful.
+
+So I tested it.
+
+---
+
+## 2. Was the Difference Actually Significant?
+
+I used a **two-proportion z-test** to determine whether there was enough statistical evidence to conclude that conversion differed between the two groups.
+
+### Hypotheses
 
 **Null hypothesis (H₀):** There is no difference in conversion rates between the ad and PSA groups.
 
 **Alternative hypothesis (H₁):** There is a difference in conversion rates between the ad and PSA groups.
 
-Using a **5% significance level**, the test produced a p-value substantially below 0.05.
+Using a **5% significance level**, the resulting p-value was substantially below 0.05.
 
-Therefore, I rejected the null hypothesis and concluded that there is statistically significant evidence of a difference in conversion between the two treatments.
+So I rejected the null hypothesis.
 
-I also calculated a 95% confidence interval for the difference in conversion rates. The interval was approximately **0.60 to 0.94 percentage points**, providing further evidence that the ad treatment performed better in this experiment.
+In other words, there is statistically significant evidence that the ad and PSA treatments produced different conversion rates in this experiment.
 
-### 3. Ad Exposure and Conversion
+I also calculated a **95% confidence interval** for the difference in conversion rates:
 
-I compared the number of ads seen by users who converted with those who did not.
+**~0.60 to 0.94 percentage points**
 
-Converters saw substantially more ads on average than non-converters. I also grouped users according to their total ad exposure and calculated conversion rates across the exposure groups.
+So the improvement wasn't just a difference I happened to observe in the sample. The statistical evidence supports the conclusion that the ad treatment performed better.
 
-The results suggest an **association between ad exposure and conversion**.
+---
 
-However, this should not be interpreted as proof that increasing ad exposure causes conversion. Users who are already more engaged or more likely to convert may also be exposed to more ads.
+## 3. What About Ad Exposure?
 
-A controlled experiment testing different exposure levels would be needed to establish causality.
+This was where the analysis became more interesting to me.
 
-### 4. Conversion by Day
+I wanted to know:
 
-I compared conversion rates across the days on which users saw the most ads.
+> **Do people who convert simply see more ads?**
 
-Conversion varied across the days, with **Monday showing the highest observed conversion rate** in this dataset.
+When I compared converters with non-converters, converters had substantially higher ad exposure on average.
 
-This is useful as a potential campaign hypothesis, but it should not be treated as definitive evidence that Monday is inherently the best day to advertise.
+I then grouped users based on the number of ads they saw and calculated the conversion rate within each group.
 
-### 5. Conversion by Hour
+The results showed an **association between ad exposure and conversion**.
 
-I also examined conversion rates across advertising hours.
+However, I was careful not to interpret this as:
 
-Conversion varied throughout the day, suggesting that the timing of ad exposure may be worth investigating further.
+> "Show people more ads and they will convert."
 
-Rather than immediately reallocating the entire advertising budget based on these observations, a follow-up experiment would help determine whether the differences persist and are large enough to justify a change in campaign scheduling.
+That's not something this analysis can prove.
 
-## Key Findings
+Someone who is already more engaged or more likely to convert may also be exposed to more ads.
 
-| Finding                         | Result                       |
-| ------------------------------- | ---------------------------- |
-| Ad conversion rate              | ~2.55%                       |
-| PSA conversion rate             | ~1.79%                       |
-| Absolute difference             | ~0.77 percentage points      |
-| Relative lift                   | ~43.1%                       |
-| Statistical significance        | Significant at α = 0.05      |
+So for me, the interesting finding isn't simply that "more ads = more conversions."
+
+It's that **ad exposure appears to be an important part of the conversion story and is worth investigating when making decisions about campaign frequency.**
+
+---
+
+## 4. Does Timing Matter?
+
+I also wanted to see whether conversion behaviour varied depending on **when users saw the ads**.
+
+### By Day
+
+Conversion varied across the days of the week.
+
+**Monday had the highest observed conversion rate**, while Saturday had the lowest.
+
+I wouldn't immediately conclude that Monday is "the best day to advertise." Instead, I'd treat this as an interesting signal that could inform future campaign testing.
+
+### By Hour
+
+Conversion also varied across advertising hours.
+
+This raised another useful business question:
+
+> **Could campaign scheduling be optimised around the times when users appear more likely to convert?**
+
+Again, the goal isn't to blindly move the entire advertising budget to one particular hour based on this dataset.
+
+The goal is to use the data to identify **where the next marketing question should come from.**
+
+---
+
+# Key Findings
+
+| Finding                         |                       Result |
+| ------------------------------- | ---------------------------: |
+| Ad conversion rate              |                       ~2.55% |
+| PSA conversion rate             |                       ~1.79% |
+| Absolute difference             |      ~0.77 percentage points |
+| Relative lift                   |                       ~43.1% |
+| Statistical significance        |      Significant at α = 0.05 |
 | 95% CI for difference           | ~0.60–0.94 percentage points |
-| Highest observed conversion day | Monday                       |
+| Highest observed conversion day |                       Monday |
 
-## Business Recommendations
+---
+
+# What Would I Recommend to the Business?
+
+The numbers are useful, but this is the part I find most interesting:
+
+**What do we actually do with them?**
 
 ### 1. Prioritise the ad treatment
 
-The ad treatment generated a higher conversion rate than the PSA and the difference was statistically significant. If conversion is the primary objective, the business has evidence to favour the ad treatment.
+The ad treatment produced a higher conversion rate than the PSA, and the difference was statistically significant.
 
-However, the next question should be whether the additional conversions justify the cost of running the ads.
+If conversion is the primary objective, there is evidence to favour the ad treatment.
 
-### 2. Test ad frequency rather than simply increasing exposure
+The next business question is whether the additional conversions justify the cost of the advertising.
 
-Higher exposure was associated with higher conversion, but more impressions do not necessarily mean more profit.
+### 2. Don't assume more exposure is always better
 
-The business should test different frequency levels to identify the point at which additional exposure stops generating meaningful incremental conversions.
+Higher ad exposure was associated with higher conversion, but that doesn't mean the answer is simply to show users more ads.
+
+I'd test different frequency levels and look for the point where additional exposure stops producing enough incremental conversions to justify the additional cost.
 
 ### 3. Investigate campaign timing
 
-The differences observed across days and hours provide useful hypotheses for future campaign scheduling.
+The differences across days and hours provide useful signals for campaign scheduling.
 
-Monday and higher-performing hours could be tested against other periods using controlled experiments before making significant budget changes.
+Monday and the higher-performing hours could become candidates for further testing rather than assumptions to build an entire media strategy around.
 
-### 4. Measure business impact beyond conversion rate
+### 4. Look beyond conversion rate
 
-Conversion rate alone does not tell us whether a campaign is profitable.
+A higher conversion rate is useful, but it isn't the same thing as higher profit.
 
-Future campaign analysis should also track:
+I'd want the business to connect this analysis with:
 
 * Cost per acquisition (CPA)
 * Cost per conversion
@@ -131,20 +203,41 @@ Future campaign analysis should also track:
 * Return on ad spend (ROAS)
 * Customer lifetime value, where available
 
-### 5. Run follow-up experiments
+That would help answer a more important question:
 
-The current analysis identifies relationships worth investigating, but further A/B tests could determine whether changes in ad frequency and timing actually cause improvements in conversion.
+> **Is the lift actually worth paying for?**
 
-## Next Steps
+### 5. Turn the analysis into a continuous optimisation process
 
-The next step for a marketing team would be to use these findings to guide decisions around:
+This is probably the biggest takeaway for me.
 
-* Which treatment should receive more budget
-* How much ad exposure is appropriate
-* Which days and hours deserve greater attention
-* Whether additional exposure generates enough incremental conversions to justify its cost
-* Which campaign metrics should be monitored to measure profitability
+The value of A/B testing isn't just deciding that **A won over B**.
 
+It's using one experiment to create better questions about **frequency, timing, cost and customer behaviour**, then using those questions to make the next marketing decision.
+
+---
+
+# My Takeaway
+
+This project started with a very simple question:
+
+> **Do ads work better than PSAs?**
+
+The data says yes.
+
+But what I found more interesting was everything that came after that question.
+
+The ad treatment produced a **~43% relative lift in conversion**, and the difference was statistically significant. At the same time, ad exposure and campaign timing revealed additional patterns that could inform how a business thinks about frequency and scheduling.
+
+For me, this is where marketing analytics gets interesting.
+
+I'm less interested in reporting that **"conversion was 2.55%"** and more interested in asking:
+
+**Why? How confident are we? What does it mean for the business? And what decision should come next?**
+
+That's the thinking I wanted this project to demonstrate.
+
+---
 
 ## Tools Used
 
@@ -152,14 +245,6 @@ The next step for a marketing team would be to use these findings to guide decis
 * **Pandas** — data manipulation and analysis
 * **NumPy** — numerical operations
 * **Matplotlib** — visualisation
-* **Statsmodels** — statistical hypothesis testing and confidence intervals
+* **Statsmodels** — hypothesis testing and confidence intervals
 * **Jupyter Notebook**
 
-
-## Takeaway
-
-The experiment provides evidence that the ad treatment outperformed the PSA treatment, producing a higher conversion rate and a statistically significant difference.
-
-The more interesting business question, however, is what happens next: how much should the business spend, how frequently should users see the ads, and when should those ads run?
-
-Those questions require moving beyond conversion rate into experimentation, campaign economics and incremental business impact.
